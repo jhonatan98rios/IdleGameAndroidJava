@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.example.idlegame.databinding.ActivityMainBinding;
 
@@ -35,15 +34,28 @@ public class MainActivity extends AppCompatActivity {
         // Update the value of progress bar
         updateHeader();
         updateProgressBar();
+        upgradeTextViews();
 
-        ImageButton btn=(ImageButton)findViewById(R.id.levelupButton);
-        btn.setOnClickListener(new View.OnClickListener(){
+        ImageButton maxCpuUpgradeBtn=(ImageButton)findViewById(R.id.levelupButton);
+
+
+        maxCpuUpgradeBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
-                CharSequence text = String.format("Value %s", game.getCpuUsage());
-                int duration = Toast.LENGTH_SHORT;
-                Toast.makeText(view.getContext(), text, duration).show();
+                buyMaxCpuUpgrade();
             }
         });
+
+
+    }
+
+    public void buyMaxCpuUpgrade() {
+        if (game.getMoney() >= game.getCpuUpgradePrice()) {
+            game.increaseMaxCpuUsage();
+            game.increaseProfitPerUser();
+            game.subtractMoney(game.getCpuUpgradePrice());
+            game.increaseCpuUpgradePrice();
+            upgradeTextViews();
+        }
     }
 
     // Update header data
@@ -64,6 +76,10 @@ public class MainActivity extends AppCompatActivity {
         binding.cpuProgressBar.setProgress(game.getCpuUsage());
     }
 
+    private void upgradeTextViews() {
+        binding.cpuUpgradePriceText.setText(String.valueOf(game.getCpuUpgradePrice()));
+    }
+
     public void startViewLoop() {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -73,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                     ViewLoop();
                 }
             }
-        }, 1000, 1000);
+        }, 0, 3000);
     }
 
     public void ViewLoop() {

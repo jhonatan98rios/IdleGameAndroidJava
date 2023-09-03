@@ -9,15 +9,19 @@ public class Game {
     private int profitPerUser;
     private int numberOfUsers;
     private int cpuUsage;
+
+    private int cpuUpgradePrice;
     private int maxCpuUsage;
 
     public Game() {
-        // Inicialize os valores iniciais
+        // Initialize values
         money = 0;
         profitPerUser = 1;
-        numberOfUsers = 0;
+        numberOfUsers = 1;
+
         cpuUsage = 0;
         maxCpuUsage = 500;
+        cpuUpgradePrice = 100;
     }
 
     public void increaseValues() {
@@ -25,12 +29,11 @@ public class Game {
         Random random = new Random();
 
         // Generate a random value to increase numberOfUsers and profitPerUser
-        int increaseUsers = random.nextInt(10) + 1;
-        int increaseProfitPerUser = random.nextInt(5) + 1;
+        int numberOfUsersPercentage = numberOfUsers / 100;
+        int increaseUsers = random.nextInt((numberOfUsersPercentage * 10) + 1) + 1;
 
-        // Increase numberOfUsers e profitPerUser
+        // Increase numberOfUsers
         numberOfUsers += increaseUsers;
-        profitPerUser += increaseProfitPerUser;
 
         // update the value money with profitPerUser and numberOfUsers
         money += profitPerUser * numberOfUsers;
@@ -53,7 +56,29 @@ public class Game {
                     increaseValues();
                 }
             }
-        }, 1000, 1000);
+        }, 2000, 2000);
+    }
+
+    public void increaseMaxCpuUsage() {
+        // Generate a random value to increase numberOfUsers and profitPerUser
+        Random random = new Random();
+        int maxCpuUsagePercentage = maxCpuUsage / 100;
+        int randomCpuUsageIncrease = (maxCpuUsagePercentage * random.nextInt(380)) + (maxCpuUsagePercentage * 20);
+        maxCpuUsage += randomCpuUsageIncrease;
+    }
+
+    public void increaseProfitPerUser() {
+        Random random = new Random();
+        int increase = random.nextInt(3) + 1;
+        profitPerUser += increase;
+    }
+
+    public void increaseCpuUpgradePrice() {
+        cpuUpgradePrice += cpuUpgradePrice / 2;
+    }
+
+    public void subtractMoney(int value) {
+        money -= value;
     }
 
     public int getMoney() {
@@ -74,5 +99,9 @@ public class Game {
 
     public int getMaxCpuUsage() {
         return maxCpuUsage;
+    }
+
+    public int getCpuUpgradePrice() {
+        return cpuUpgradePrice;
     }
 }
