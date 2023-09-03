@@ -16,16 +16,17 @@ public class Game {
         money = 0;
         profitPerUser = 1;
         numberOfUsers = 0;
-        cpuUsage = 10;
-        maxCpuUsage = 100;
+        cpuUsage = 0;
+        maxCpuUsage = 500;
     }
 
     public void increaseValues() {
+
         Random random = new Random();
 
         // Generate a random value to increase numberOfUsers and profitPerUser
-        int increaseUsers = 1; //random.nextInt(10) + 1;
-        int increaseProfitPerUser = 1; //random.nextInt(5) + 1;
+        int increaseUsers = random.nextInt(10) + 1;
+        int increaseProfitPerUser = random.nextInt(5) + 1;
 
         // Increase numberOfUsers e profitPerUser
         numberOfUsers += increaseUsers;
@@ -48,7 +49,9 @@ public class Game {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                increaseValues();
+                if (getCpuUsage() < getMaxCpuUsage()) {
+                    increaseValues();
+                }
             }
         }, 1000, 1000);
     }

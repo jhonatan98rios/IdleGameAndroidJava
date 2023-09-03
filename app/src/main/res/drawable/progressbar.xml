@@ -20,9 +20,8 @@
         <!--set the color gradients
             of the shape-->
         <gradient
-            android:angle="0"
-            android:startColor="#339955"
-            android:endColor="#339955"
+            android:startColor="#00AA33"
+            android:endColor="#CC0000"
             android:useLevel="false" />
     </shape>
 

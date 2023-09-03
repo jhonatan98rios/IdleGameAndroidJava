@@ -1,7 +1,6 @@
 package com.example.idlegame;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
 
 import android.os.Bundle;
 import android.view.View;
@@ -33,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
         game.startGameLoop();
         startViewLoop();
 
-        // Atualiza o valor da barra de progresso
-        binding.cpuProgressBar.setMax(game.getMaxCpuUsage());
-        binding.cpuProgressBar.setProgress(game.getCpuUsage());
+        // Update the value of progress bar
+        updateHeader();
+        updateProgressBar();
 
         ImageButton btn=(ImageButton)findViewById(R.id.levelupButton);
         btn.setOnClickListener(new View.OnClickListener(){
@@ -47,13 +46,22 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // Método que atualiza o valor da barra de progresso
-    private void updateProgressBar() {
-        binding.cpuProgressBar.setProgress(game.getCpuUsage());
+    // Update header data
+    private void updateHeader() {
+        String str_money = String.valueOf(game.getMoney());
+        binding.moneyText.setText(str_money);
 
-//        if (binding.cpuUsage != null) {
-//            binding.cpuUsage.setText(game.getCpuUsage());
-//        }
+        String str_profit_per_user = String.valueOf(game.getProfitPerUser());
+        binding.profitPerUserText.setText(str_profit_per_user);
+
+        String str_number_of_users = String.valueOf(game.getNumberOfUsers());
+        binding.numberOfUsersText.setText(str_number_of_users);
+    }
+
+    // Update progress bar
+    private void updateProgressBar() {
+        binding.cpuProgressBar.setMax(game.getMaxCpuUsage());
+        binding.cpuProgressBar.setProgress(game.getCpuUsage());
     }
 
     public void startViewLoop() {
@@ -61,9 +69,15 @@ public class MainActivity extends AppCompatActivity {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                game.increaseValues();
-                updateProgressBar();
+                if (game.getCpuUsage() <= game.getMaxCpuUsage()) {
+                    ViewLoop();
+                }
             }
         }, 1000, 1000);
+    }
+
+    public void ViewLoop() {
+        updateHeader();
+        updateProgressBar();
     }
 }
