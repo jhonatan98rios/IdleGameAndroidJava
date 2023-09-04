@@ -34,10 +34,15 @@ public class MainActivity extends AppCompatActivity {
         // Update the value of progress bar
         updateHeader();
         updateProgressBar();
-        upgradeTextViews();
+        updateTextViews();
 
-        ImageButton maxCpuUpgradeBtn=(ImageButton)findViewById(R.id.levelupButton);
+        // Add methods to the clickable elements
+        addEventListener();
+    }
 
+    public void addEventListener() {
+        ImageButton maxCpuUpgradeBtn=(ImageButton)findViewById(R.id.cpuLevelupButton);
+        ImageButton maxRamUpgradeBtn=(ImageButton)findViewById(R.id.ramLevelupButton);
 
         maxCpuUpgradeBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
@@ -45,7 +50,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        maxRamUpgradeBtn.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view) {
+                buyMaxRamUpgrade();
+            }
+        });
     }
 
     public void buyMaxCpuUpgrade() {
@@ -54,7 +63,19 @@ public class MainActivity extends AppCompatActivity {
             game.increaseProfitPerUser();
             game.subtractMoney(game.getCpuUpgradePrice());
             game.increaseCpuUpgradePrice();
-            upgradeTextViews();
+            updateTextViews();
+            updateHeader();
+        }
+    }
+
+    public void buyMaxRamUpgrade() {
+        if (game.getMoney() >= game.getRamUpgradePrice()) {
+            game.increaseMaxRamUsage();
+            game.increaseProfitPerUser();
+            game.subtractMoney(game.getRamUpgradePrice());
+            game.increaseRamUpgradePrice();
+            updateTextViews();
+            updateHeader();
         }
     }
 
@@ -74,10 +95,14 @@ public class MainActivity extends AppCompatActivity {
     private void updateProgressBar() {
         binding.cpuProgressBar.setMax(game.getMaxCpuUsage());
         binding.cpuProgressBar.setProgress(game.getCpuUsage());
+
+        binding.ramProgressBar.setMax(game.getMaxRamUsage());
+        binding.ramProgressBar.setProgress(game.getRamUsage());
     }
 
-    private void upgradeTextViews() {
+    private void updateTextViews() {
         binding.cpuUpgradePriceText.setText(String.valueOf(game.getCpuUpgradePrice()));
+        binding.ramUpgradePriceText.setText(String.valueOf(game.getRamUpgradePrice()));
     }
 
     public void startViewLoop() {
@@ -85,11 +110,12 @@ public class MainActivity extends AppCompatActivity {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (game.getCpuUsage() <= game.getMaxCpuUsage()) {
+                if (game.getCpuUsage() <= game.getMaxCpuUsage() &&
+                    game.getRamUsage() <= game.getMaxRamUsage()) {
                     ViewLoop();
                 }
             }
-        }, 0, 3000);
+        }, 0, 200);
     }
 
     public void ViewLoop() {
