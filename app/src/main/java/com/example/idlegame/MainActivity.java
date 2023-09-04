@@ -1,10 +1,13 @@
 package com.example.idlegame;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.idlegame.databinding.ActivityMainBinding;
 
@@ -95,10 +98,41 @@ public class MainActivity extends AppCompatActivity {
     private void updateProgressBar() {
         binding.cpuProgressBar.setMax(game.getMaxCpuUsage());
         binding.cpuProgressBar.setProgress(game.getCpuUsage());
+        updateCpuProgressDrawable();
 
         binding.ramProgressBar.setMax(game.getMaxRamUsage());
         binding.ramProgressBar.setProgress(game.getRamUsage());
+        updateRamProgressDrawable();
     }
+
+    private void updateCpuProgressDrawable() {
+        Drawable drawable;
+
+        if (game.getCpuUsage() >= game.getMaxCpuUsage() * 0.75) {
+            drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.red_progress_bg);
+        } else if (game.getCpuUsage() >= game.getMaxCpuUsage() * 0.5) {
+            drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.yellow_progress_bg);
+        } else {
+            drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.green_progress_bg);
+        }
+
+        binding.cpuProgressBar.setProgressDrawable(drawable);
+    }
+
+    private void updateRamProgressDrawable() {
+        Drawable drawable;
+
+        if (game.getRamUsage() >= game.getMaxRamUsage() * 0.75) {
+            drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.red_progress_bg);
+        } else if (game.getRamUsage() >= game.getMaxRamUsage() * 0.5) {
+            drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.yellow_progress_bg);
+        } else {
+            drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.green_progress_bg);
+        }
+
+        binding.ramProgressBar.setProgressDrawable(drawable);
+    }
+
 
     private void updateTextViews() {
         binding.cpuUpgradePriceText.setText(String.valueOf(game.getCpuUpgradePrice()));
@@ -114,8 +148,12 @@ public class MainActivity extends AppCompatActivity {
                     game.getRamUsage() <= game.getMaxRamUsage()) {
                     ViewLoop();
                 }
+
+                if (game.getNumberOfUsers() == 0) {
+                    Toast.makeText(getApplicationContext(), "Perdeste", Toast.LENGTH_LONG).show();
+                }
             }
-        }, 0, 200);
+        }, 0, 100);
     }
 
     public void ViewLoop() {

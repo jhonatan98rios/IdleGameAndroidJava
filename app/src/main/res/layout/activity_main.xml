@@ -48,6 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
+                    android:textColor="@color/black"
                     android:layout_weight="1" />
 
             </LinearLayout>
@@ -72,6 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
+                    android:textColor="@color/black"
                     android:layout_weight="1"
                     android:text="10" />
 
@@ -97,6 +99,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
+                    android:textColor="@color/black"
                     android:layout_weight="1"
                     android:text="5" />
             </LinearLayout>
@@ -108,6 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:textColor="@color/black"
             android:text="HARDWARE USAGE"
             android:textSize="20sp" />
 
@@ -117,6 +121,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:paddingHorizontal="8dp"
+            android:textColor="@color/black"
             android:text="Não deixe o consumo de hardware chegar ao máximo. Isso pode gerar lentidão, indisponibilidade e perdade usuários." />
 
         <LinearLayout
@@ -167,6 +172,7 @@
 
                     <TextView
                         android:id="@+id/cpuUpgradePriceText"
+                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -214,6 +220,7 @@
 
                     <TextView
                         android:id="@+id/ramUpgradePriceText"
+                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>

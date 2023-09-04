@@ -1,11 +1,13 @@
 package com.example.idlegame;
 
+import android.widget.Toast;
+
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Game {
-    private int money;
+    private long money;
     private int profitPerUser;
     private int numberOfUsers;
     private int cpuUsage;
@@ -15,6 +17,8 @@ public class Game {
     private int ramUsage;
     private int maxRamUsage;
     private int ramUpgradePrice;
+
+    private Random random;
 
     public Game() {
         // Initialize values
@@ -29,11 +33,26 @@ public class Game {
         ramUsage = 1;
         maxRamUsage = 500;
         ramUpgradePrice = 100;
+
+        random = new Random();
+    }
+
+    public void startGameLoop() {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (getCpuUsage() < getMaxCpuUsage() &&
+                    getRamUsage() < getMaxRamUsage()) {
+                    increaseValues();
+                } else {
+                    decreaseValues();
+                }
+            }
+        }, 0, 100);
     }
 
     public void increaseValues() {
-
-        Random random = new Random();
 
         // Generate a random value to increase numberOfUsers and profitPerUser
         int numberOfUsersPercentage = numberOfUsers / 100;
@@ -43,12 +62,12 @@ public class Game {
         numberOfUsers += increaseUsers;
 
         // update the value money with profitPerUser and numberOfUsers
-        int debtors = random.nextInt((numberOfUsers / 2) + 1);
+        int debtors = random.nextInt(numberOfUsers + 1);
         money += (profitPerUser * numberOfUsers) - debtors;
 
         // Increase the value of cpuUsage with numberOfUsers
-        cpuUsage += numberOfUsers + random.nextInt((numberOfUsers / 50) + 1);
-        ramUsage += numberOfUsers + random.nextInt((numberOfUsers / 50) + 1);
+        cpuUsage += increaseUsers + random.nextInt(numberOfUsers);
+        ramUsage += increaseUsers + random.nextInt(numberOfUsers);
 
         // Check if cpuUsage is bigger than the maxCpuUsage
         if (cpuUsage > maxCpuUsage) {
@@ -60,26 +79,23 @@ public class Game {
         }
     }
 
-    public void startGameLoop() {
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                if (getCpuUsage() < getMaxCpuUsage() &&
-                    getRamUsage() < getMaxRamUsage()) {
-                    increaseValues();
-                }
-            }
-        }, 0, 200);
+    public void decreaseValues() {
+        if (numberOfUsers > 0) {
+            int decreaseUsers = random.nextInt((numberOfUsers / 10) + 1) + 1;
+            money -= profitPerUser * numberOfUsers;
+            numberOfUsers -= decreaseUsers;
+            cpuUsage -= decreaseUsers;
+            ramUsage -= decreaseUsers;
+
+        }
     }
 
     // CPU Methods
     public void increaseMaxCpuUsage() {
         // Generate a random value to increase numberOfUsers and profitPerUser
-        Random random = new Random();
         int maxCpuUsagePercentage = maxCpuUsage / 100;
-        int randomCpuUsageIncrease = (maxCpuUsagePercentage  * random.nextInt(130)) + (maxCpuUsagePercentage * 20);
-        maxCpuUsage += randomCpuUsageIncrease;
+        int randomMaxCpuUsageIncrease = (maxCpuUsagePercentage  * random.nextInt(180)) + (maxCpuUsagePercentage * 20);
+        maxCpuUsage += randomMaxCpuUsageIncrease;
     }
 
     public void increaseCpuUpgradePrice() {
@@ -89,15 +105,12 @@ public class Game {
     // Ram Methods
     public void increaseMaxRamUsage() {
         // Generate a random value to increase numberOfUsers and profitPerUser
-        Random random = new Random();
         int maxRamUsagePercentage = maxRamUsage / 100;
-        int randomRamUsageIncrease = (maxRamUsagePercentage * random.nextInt(130)) + (maxRamUsagePercentage * 20);
-        maxRamUsage += randomRamUsageIncrease;
+        int randomMaxRamUsageIncrease = (maxRamUsagePercentage * random.nextInt(180)) + (maxRamUsagePercentage * 20);
+        maxRamUsage += randomMaxRamUsageIncrease;
     }
 
-    public void increaseRamUpgradePrice() {
-        ramUpgradePrice += ramUpgradePrice * 1.3;
-    }
+    public void increaseRamUpgradePrice() { ramUpgradePrice += ramUpgradePrice * 1.3; }
 
     // Money Methods
     public void increaseProfitPerUser() {
@@ -108,7 +121,7 @@ public class Game {
         money -= value;
     }
 
-    public int getMoney() {
+    public long getMoney() {
         return money;
     }
 
