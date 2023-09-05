@@ -175,6 +175,7 @@
                     <TextView
                         android:id="@+id/cpuUpgradePriceText"
                         android:textColor="@color/black"
+                        android:textSize="12sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -225,6 +226,7 @@
                     <TextView
                         android:id="@+id/ramUpgradePriceText"
                         android:textColor="@color/black"
+                        android:textSize="12sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -274,6 +276,7 @@
                     <TextView
                         android:id="@+id/harddiskUpgradePriceText"
                         android:textColor="@color/black"
+                        android:textSize="12sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -292,7 +295,7 @@
                     android:layout_width="32px"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/harddisk" />
+                    app:srcCompat="@drawable/network" />
 
                 <ProgressBar
                     android:id="@+id/networkProgressBar"
@@ -322,9 +325,10 @@
 
                     <TextView
                         android:id="@+id/networkUpgradePriceText"
-                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
 

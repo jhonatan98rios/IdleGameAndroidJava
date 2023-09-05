@@ -31,6 +31,6 @@ public class AbstractMetrics {
     }
 
     public void increaseUpgradePrice() {
-        upgradePrice += upgradePrice * 1.3;
+        upgradePrice += upgradePrice * 1.4;
     }
 }

@@ -21,10 +21,12 @@ public class PlayerMetrics {
 
         // Increase numberOfUsers
         numberOfUsers += increaseUsers;
+        long profit = profitPerUser * numberOfUsers;
+        double expenses = profit * 0.2;
 
         // update the value money with profitPerUser and numberOfUsers
         int debtors = random.nextInt(numberOfUsers + 1);
-        money += (profitPerUser * numberOfUsers) - debtors;
+        money += (long)((profit - debtors) - expenses);
     }
 
     public void subtractMoney(int value) {
@@ -32,6 +34,11 @@ public class PlayerMetrics {
     }
 
     public void increaseProfitPerUser() {
-        profitPerUser += 1;
+        double randomNumber = random.nextDouble();
+        if (randomNumber >= 0.9) {
+            profitPerUser += 2;
+        } else if (randomNumber >= 0.5) {
+            profitPerUser += 1;
+        }
     }
 }

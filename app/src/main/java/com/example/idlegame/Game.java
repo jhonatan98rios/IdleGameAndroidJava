@@ -32,7 +32,7 @@ public class Game {
             public void run() {
                 executionInterval();
             }
-        }, 0, 300);
+        }, 0, 500);
     }
 
     public void executionInterval() {
@@ -49,28 +49,32 @@ public class Game {
     public void increaseValues() {
         // Generate a random value to increase numberOfUsers and profitPerUser
         int numberOfUsersPercentage = playerMetrics.numberOfUsers / 100;
-        int increaseUsers = random.nextInt((numberOfUsersPercentage * 10) + 1) + 1;
-        int increaseHardwareUsage = increaseUsers + random.nextInt(playerMetrics.numberOfUsers);
+        int increaseUsers = random.nextInt((numberOfUsersPercentage * 2) + 1) + 1;
 
         playerMetrics.increaseValues(increaseUsers);
 
         // Increase the value of cpuMetrics.usage with numberOfUsers
-        cpuMetrics.increaseUsage(increaseHardwareUsage);
-        ramMetrics.increaseUsage(increaseHardwareUsage);
-        hardDiskMetrics.increaseUsage(increaseHardwareUsage);
-        networkMetrics.increaseUsage(increaseHardwareUsage);
+        cpuMetrics.increaseUsage(increaseUsers + random.nextInt(playerMetrics.numberOfUsers));
+        ramMetrics.increaseUsage(increaseUsers + random.nextInt(playerMetrics.numberOfUsers));
+        hardDiskMetrics.increaseUsage(increaseUsers + random.nextInt(playerMetrics.numberOfUsers));
+        networkMetrics.increaseUsage(increaseUsers + random.nextInt(playerMetrics.numberOfUsers));
     }
 
     public void decreaseValues() {
-        if (playerMetrics.numberOfUsers > 0) {
-            int decreaseUsers = random.nextInt((playerMetrics.numberOfUsers / 10) + 1) + 1;
-            playerMetrics.money -= playerMetrics.profitPerUser * playerMetrics.numberOfUsers;
-            playerMetrics.numberOfUsers -= decreaseUsers;
+        if (playerMetrics.numberOfUsers > 0 && playerMetrics.money > 0) {
+            int decreaseUsers = random.nextInt((playerMetrics.numberOfUsers / 2) + 1);
 
-            cpuMetrics.usage -= decreaseUsers;
-            ramMetrics.usage -= decreaseUsers;
-            hardDiskMetrics.usage -= decreaseUsers;
-            networkMetrics.usage -= decreaseUsers;
+            int userLoss = playerMetrics.profitPerUser * decreaseUsers;
+            int usageLoss = random.nextInt(playerMetrics.profitPerUser * playerMetrics.numberOfUsers);
+            int damage = userLoss + usageLoss;
+
+            playerMetrics.numberOfUsers -= decreaseUsers;
+            playerMetrics.money -= damage;
+
+            cpuMetrics.usage -= decreaseUsers + random.nextInt(cpuMetrics.usage / 10);
+            ramMetrics.usage -= decreaseUsers + random.nextInt(ramMetrics.usage / 10);
+            hardDiskMetrics.usage -= decreaseUsers + random.nextInt(hardDiskMetrics.usage / 10);
+            networkMetrics.usage -= decreaseUsers + random.nextInt(networkMetrics.usage / 10);
         }
     }
 

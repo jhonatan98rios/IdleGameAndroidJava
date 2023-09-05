@@ -221,11 +221,11 @@ public class MainActivity extends AppCompatActivity {
                     ViewLoop();
                 }
 
-                if (game.getNumberOfUsers() == 0) {
-                    Toast.makeText(getApplicationContext(), "Perdeste", Toast.LENGTH_LONG).show();
+                if (game.getNumberOfUsers() <= 0 || game.getMoney() <= 0) {
+                    //Toast.makeText(getApplicationContext(), "Perdeste", Toast.LENGTH_LONG).show();
                 }
             }
-        }, 0, 300);
+        }, 0, 500);
     }
 
     public String formatValue(long number) {
