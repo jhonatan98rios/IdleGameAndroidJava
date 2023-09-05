@@ -61,22 +61,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void buyMaxCpuUpgrade() {
-        if (game.getMoney() >= game.getCpuUpgradePrice()) {
-            game.increaseMaxCpuUsage();
+        if (game.getMoney() >= game.cpuMetrics.upgradePrice) {
+            game.cpuMetrics.increaseMaxUsage();
             game.increaseProfitPerUser();
-            game.subtractMoney(game.getCpuUpgradePrice());
-            game.increaseCpuUpgradePrice();
+            game.subtractMoney(game.cpuMetrics.upgradePrice);
+            game.cpuMetrics.increaseUpgradePrice();
+
             updateTextViews();
             updateHeader();
         }
     }
 
     public void buyMaxRamUpgrade() {
-        if (game.getMoney() >= game.getRamUpgradePrice()) {
-            game.increaseMaxRamUsage();
+        if (game.getMoney() >= game.ramMetrics.upgradePrice) {
+
+            game.ramMetrics.increaseMaxUsage();
+
             game.increaseProfitPerUser();
-            game.subtractMoney(game.getRamUpgradePrice());
-            game.increaseRamUpgradePrice();
+            game.subtractMoney(game.ramMetrics.upgradePrice);
+            game.ramMetrics.increaseUpgradePrice();
             updateTextViews();
             updateHeader();
         }
@@ -96,21 +99,21 @@ public class MainActivity extends AppCompatActivity {
 
     // Update progress bar
     private void updateProgressBar() {
-        binding.cpuProgressBar.setMax(game.getMaxCpuUsage());
-        binding.cpuProgressBar.setProgress(game.getCpuUsage());
+        binding.cpuProgressBar.setMax(game.cpuMetrics.maxUsage);
+        binding.cpuProgressBar.setProgress(game.cpuMetrics.usage);
         updateCpuProgressDrawable();
 
-        binding.ramProgressBar.setMax(game.getMaxRamUsage());
-        binding.ramProgressBar.setProgress(game.getRamUsage());
+        binding.ramProgressBar.setMax(game.ramMetrics.maxUsage);
+        binding.ramProgressBar.setProgress(game.ramMetrics.usage);
         updateRamProgressDrawable();
     }
 
     private void updateCpuProgressDrawable() {
         Drawable drawable;
 
-        if (game.getCpuUsage() >= game.getMaxCpuUsage() * 0.75) {
+        if (game.cpuMetrics.usage >= game.cpuMetrics.maxUsage * 0.75) {
             drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.red_progress_bg);
-        } else if (game.getCpuUsage() >= game.getMaxCpuUsage() * 0.5) {
+        } else if (game.cpuMetrics.usage >= game.cpuMetrics.maxUsage * 0.5) {
             drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.yellow_progress_bg);
         } else {
             drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.green_progress_bg);
@@ -122,9 +125,9 @@ public class MainActivity extends AppCompatActivity {
     private void updateRamProgressDrawable() {
         Drawable drawable;
 
-        if (game.getRamUsage() >= game.getMaxRamUsage() * 0.75) {
+        if (game.ramMetrics.usage >= game.ramMetrics.maxUsage * 0.75) {
             drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.red_progress_bg);
-        } else if (game.getRamUsage() >= game.getMaxRamUsage() * 0.5) {
+        } else if (game.ramMetrics.usage >= game.ramMetrics.maxUsage * 0.5) {
             drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.yellow_progress_bg);
         } else {
             drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.green_progress_bg);
@@ -135,8 +138,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void updateTextViews() {
-        binding.cpuUpgradePriceText.setText(String.valueOf(game.getCpuUpgradePrice()));
-        binding.ramUpgradePriceText.setText(String.valueOf(game.getRamUpgradePrice()));
+        binding.cpuUpgradePriceText.setText(String.valueOf(game.cpuMetrics.upgradePrice));
+        binding.ramUpgradePriceText.setText(String.valueOf(game.ramMetrics.upgradePrice));
     }
 
     public void startViewLoop() {
@@ -144,8 +147,8 @@ public class MainActivity extends AppCompatActivity {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (game.getCpuUsage() <= game.getMaxCpuUsage() &&
-                    game.getRamUsage() <= game.getMaxRamUsage()) {
+                if (game.cpuMetrics.usage <= game.cpuMetrics.maxUsage &&
+                    game.ramMetrics.usage <= game.ramMetrics.maxUsage) {
                     ViewLoop();
                 }
 
