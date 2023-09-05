@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.idlegame.databinding.ActivityMainBinding;
@@ -44,8 +45,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addEventListener() {
-        ImageButton maxCpuUpgradeBtn=(ImageButton)findViewById(R.id.cpuLevelupButton);
-        ImageButton maxRamUpgradeBtn=(ImageButton)findViewById(R.id.ramLevelupButton);
+        LinearLayout maxCpuUpgradeBtn=binding.cpuLevelupButton;
+        LinearLayout maxRamUpgradeBtn=binding.ramLevelupButton;
+        LinearLayout maxHardDiskUpgradeBtn=binding.harddiskLevelupButton;
 
         maxCpuUpgradeBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
@@ -58,15 +60,20 @@ public class MainActivity extends AppCompatActivity {
                 buyMaxRamUpgrade();
             }
         });
+
+        maxHardDiskUpgradeBtn.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view) {
+                buyMaxHardDiskUpgrade();
+            }
+        });
     }
 
     public void buyMaxCpuUpgrade() {
         if (game.getMoney() >= game.cpuMetrics.upgradePrice) {
             game.cpuMetrics.increaseMaxUsage();
-            game.increaseProfitPerUser();
-            game.subtractMoney(game.cpuMetrics.upgradePrice);
+            game.playerMetrics.increaseProfitPerUser();
+            game.playerMetrics.subtractMoney(game.cpuMetrics.upgradePrice);
             game.cpuMetrics.increaseUpgradePrice();
-
             updateTextViews();
             updateHeader();
         }
@@ -74,12 +81,21 @@ public class MainActivity extends AppCompatActivity {
 
     public void buyMaxRamUpgrade() {
         if (game.getMoney() >= game.ramMetrics.upgradePrice) {
-
             game.ramMetrics.increaseMaxUsage();
-
-            game.increaseProfitPerUser();
-            game.subtractMoney(game.ramMetrics.upgradePrice);
+            game.playerMetrics.increaseProfitPerUser();
+            game.playerMetrics.subtractMoney(game.ramMetrics.upgradePrice);
             game.ramMetrics.increaseUpgradePrice();
+            updateTextViews();
+            updateHeader();
+        }
+    }
+
+    public void buyMaxHardDiskUpgrade() {
+        if (game.getMoney() >= game.hardDiskMetrics.upgradePrice) {
+            game.hardDiskMetrics.increaseMaxUsage();
+            game.playerMetrics.increaseProfitPerUser();
+            game.playerMetrics.subtractMoney(game.hardDiskMetrics.upgradePrice);
+            game.hardDiskMetrics.increaseUpgradePrice();
             updateTextViews();
             updateHeader();
         }
@@ -87,13 +103,13 @@ public class MainActivity extends AppCompatActivity {
 
     // Update header data
     private void updateHeader() {
-        String str_money = String.valueOf(game.getMoney());
+        String str_money = formatValue(game.getMoney());
         binding.moneyText.setText(str_money);
 
-        String str_profit_per_user = String.valueOf(game.getProfitPerUser());
+        String str_profit_per_user = formatValue(game.getProfitPerUser());
         binding.profitPerUserText.setText(str_profit_per_user);
 
-        String str_number_of_users = String.valueOf(game.getNumberOfUsers());
+        String str_number_of_users = formatValue(game.getNumberOfUsers());
         binding.numberOfUsersText.setText(str_number_of_users);
     }
 
@@ -106,6 +122,10 @@ public class MainActivity extends AppCompatActivity {
         binding.ramProgressBar.setMax(game.ramMetrics.maxUsage);
         binding.ramProgressBar.setProgress(game.ramMetrics.usage);
         updateRamProgressDrawable();
+
+        binding.harddiskProgressBar.setMax(game.hardDiskMetrics.maxUsage);
+        binding.harddiskProgressBar.setProgress(game.hardDiskMetrics.usage);
+        updateHardDriveProgressDrawable();
     }
 
     private void updateCpuProgressDrawable() {
@@ -118,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.green_progress_bg);
         }
-
         binding.cpuProgressBar.setProgressDrawable(drawable);
     }
 
@@ -132,14 +151,26 @@ public class MainActivity extends AppCompatActivity {
         } else {
             drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.green_progress_bg);
         }
-
         binding.ramProgressBar.setProgressDrawable(drawable);
     }
 
+    private void updateHardDriveProgressDrawable() {
+        Drawable drawable;
+
+        if (game.hardDiskMetrics.usage >= game.hardDiskMetrics.maxUsage * 0.75) {
+            drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.red_progress_bg);
+        } else if (game.hardDiskMetrics.usage >= game.hardDiskMetrics.maxUsage * 0.5) {
+            drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.yellow_progress_bg);
+        } else {
+            drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.green_progress_bg);
+        }
+        binding.harddiskProgressBar.setProgressDrawable(drawable);
+    }
 
     private void updateTextViews() {
-        binding.cpuUpgradePriceText.setText(String.valueOf(game.cpuMetrics.upgradePrice));
-        binding.ramUpgradePriceText.setText(String.valueOf(game.ramMetrics.upgradePrice));
+        binding.cpuUpgradePriceText.setText(formatValue(game.cpuMetrics.upgradePrice));
+        binding.ramUpgradePriceText.setText(formatValue(game.ramMetrics.upgradePrice));
+        binding.harddiskUpgradePriceText.setText(formatValue(game.hardDiskMetrics.upgradePrice));
     }
 
     public void startViewLoop() {
@@ -148,7 +179,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (game.cpuMetrics.usage <= game.cpuMetrics.maxUsage &&
-                    game.ramMetrics.usage <= game.ramMetrics.maxUsage) {
+                    game.ramMetrics.usage <= game.ramMetrics.maxUsage &&
+                    game.hardDiskMetrics.usage <= game.hardDiskMetrics.maxUsage) {
                     ViewLoop();
                 }
 
@@ -156,7 +188,24 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Perdeste", Toast.LENGTH_LONG).show();
                 }
             }
-        }, 0, 100);
+        }, 0, 300);
+    }
+
+    public String formatValue(long number) {
+
+        String abbreviation = "";
+
+        if (number >= 10_000_000_000L) {
+            abbreviation = number / 1_000_000_000 + "B";
+        } else if (number >= 10_000_000) {
+            abbreviation = number / 1_000_000 + "M";
+        } else if (number >= 10_000) {
+            abbreviation = number / 1_000 + "k";
+        } else {
+            abbreviation = String.valueOf(number);
+        }
+
+        return abbreviation;
     }
 
     public void ViewLoop() {

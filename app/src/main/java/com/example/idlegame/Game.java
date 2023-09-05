@@ -5,23 +5,21 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Game {
-    private long money;
-    private int profitPerUser;
-    private int numberOfUsers;
+
+    public PlayerMetrics playerMetrics;
 
     public CpuMetrics cpuMetrics;
     public RamMetrics ramMetrics;
 
+    public HardDiskMetrics hardDiskMetrics;
+
     private Random random;
 
     public Game() {
-        // Initialize values
-        money = 0;
-        profitPerUser = 1;
-        numberOfUsers = 1;
-
+        playerMetrics = new PlayerMetrics();
         cpuMetrics = new CpuMetrics();
         ramMetrics = new RamMetrics();
+        hardDiskMetrics = new HardDiskMetrics();
 
         random = new Random();
     }
@@ -31,72 +29,57 @@ public class Game {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (cpuMetrics.usage < cpuMetrics.maxUsage &&
-                    ramMetrics.usage < ramMetrics.maxUsage) {
-                    increaseValues();
-                } else {
-                    decreaseValues();
-                }
+                executionInterval();
             }
-        }, 0, 100);
+        }, 0, 300);
+    }
+
+    public void executionInterval() {
+        if (cpuMetrics.usage < cpuMetrics.maxUsage &&
+            ramMetrics.usage < ramMetrics.maxUsage &&
+            hardDiskMetrics.usage < hardDiskMetrics.maxUsage) {
+            increaseValues();
+        } else {
+            decreaseValues();
+        }
     }
 
     public void increaseValues() {
-
         // Generate a random value to increase numberOfUsers and profitPerUser
-        int numberOfUsersPercentage = numberOfUsers / 100;
+        int numberOfUsersPercentage = playerMetrics.numberOfUsers / 100;
         int increaseUsers = random.nextInt((numberOfUsersPercentage * 10) + 1) + 1;
+        int increaseHardwareUsage = increaseUsers + random.nextInt(playerMetrics.numberOfUsers);
 
-        // Increase numberOfUsers
-        numberOfUsers += increaseUsers;
-
-        // update the value money with profitPerUser and numberOfUsers
-        int debtors = random.nextInt(numberOfUsers + 1);
-        money += (profitPerUser * numberOfUsers) - debtors;
+        playerMetrics.increaseValues(increaseUsers);
 
         // Increase the value of cpuMetrics.usage with numberOfUsers
-        cpuMetrics.usage += increaseUsers + random.nextInt(numberOfUsers);
-        ramMetrics.usage += increaseUsers + random.nextInt(numberOfUsers);
-
-        // Check if cpuMetrics.usage is bigger than the cpuMetrics.maxUsage
-        if (cpuMetrics.usage > cpuMetrics.maxUsage) {
-            cpuMetrics.usage = cpuMetrics.maxUsage;
-        }
-
-        if (ramMetrics.usage > ramMetrics.maxUsage) {
-            ramMetrics.usage = ramMetrics.maxUsage;
-        }
+        cpuMetrics.increaseUsage(increaseHardwareUsage);
+        ramMetrics.increaseUsage(increaseHardwareUsage);
+        hardDiskMetrics.increaseUsage(increaseHardwareUsage);
     }
 
     public void decreaseValues() {
-        if (numberOfUsers > 0) {
-            int decreaseUsers = random.nextInt((numberOfUsers / 10) + 1) + 1;
-            money -= profitPerUser * numberOfUsers;
-            numberOfUsers -= decreaseUsers;
+        if (playerMetrics.numberOfUsers > 0) {
+            int decreaseUsers = random.nextInt((playerMetrics.numberOfUsers / 10) + 1) + 1;
+            playerMetrics.money -= playerMetrics.profitPerUser * playerMetrics.numberOfUsers;
+            playerMetrics.numberOfUsers -= decreaseUsers;
+
             cpuMetrics.usage -= decreaseUsers;
             ramMetrics.usage -= decreaseUsers;
+            hardDiskMetrics.usage -= decreaseUsers;
         }
     }
 
-    // Money Methods
-    public void increaseProfitPerUser() {
-        profitPerUser += 1;
-    }
-
-    public void subtractMoney(int value) {
-        money -= value;
-    }
-
     public long getMoney() {
-        return money;
+        return playerMetrics.money;
     }
 
     public int getProfitPerUser() {
-        return profitPerUser;
+        return playerMetrics.profitPerUser;
     }
 
     public int getNumberOfUsers() {
-        return numberOfUsers;
+        return playerMetrics.numberOfUsers;
     }
 
 }

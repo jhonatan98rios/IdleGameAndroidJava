@@ -16,6 +16,14 @@ public class AbstractMetrics {
         random = new Random();
     }
 
+    public void increaseUsage(int increaseHardwareUsage) {
+        usage += increaseHardwareUsage;
+
+        if (usage > maxUsage) {
+            usage = maxUsage;
+        }
+    }
+
     public void increaseMaxUsage() {
         int maxUsagePercentage = maxUsage / 100;
         int randomMaxCpuUsageIncrease = (maxUsagePercentage  * random.nextInt(180)) + (maxUsagePercentage * 20);
@@ -24,17 +32,5 @@ public class AbstractMetrics {
 
     public void increaseUpgradePrice() {
         upgradePrice += upgradePrice * 1.3;
-    }
-
-    public int getUsage() {
-        return usage;
-    }
-
-    public int getMaxUsage() {
-        return maxUsage;
-    }
-
-    public int getUpgradePrice() {
-        return upgradePrice;
     }
 }
