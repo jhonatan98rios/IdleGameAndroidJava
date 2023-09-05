@@ -10,8 +10,8 @@ public class Game {
 
     public CpuMetrics cpuMetrics;
     public RamMetrics ramMetrics;
-
     public HardDiskMetrics hardDiskMetrics;
+    public NetworkMetrics networkMetrics;
 
     private Random random;
 
@@ -20,6 +20,7 @@ public class Game {
         cpuMetrics = new CpuMetrics();
         ramMetrics = new RamMetrics();
         hardDiskMetrics = new HardDiskMetrics();
+        networkMetrics = new NetworkMetrics();
 
         random = new Random();
     }
@@ -37,7 +38,8 @@ public class Game {
     public void executionInterval() {
         if (cpuMetrics.usage < cpuMetrics.maxUsage &&
             ramMetrics.usage < ramMetrics.maxUsage &&
-            hardDiskMetrics.usage < hardDiskMetrics.maxUsage) {
+            hardDiskMetrics.usage < hardDiskMetrics.maxUsage &&
+            networkMetrics.usage < networkMetrics.maxUsage) {
             increaseValues();
         } else {
             decreaseValues();
@@ -56,6 +58,7 @@ public class Game {
         cpuMetrics.increaseUsage(increaseHardwareUsage);
         ramMetrics.increaseUsage(increaseHardwareUsage);
         hardDiskMetrics.increaseUsage(increaseHardwareUsage);
+        networkMetrics.increaseUsage(increaseHardwareUsage);
     }
 
     public void decreaseValues() {
@@ -67,6 +70,7 @@ public class Game {
             cpuMetrics.usage -= decreaseUsers;
             ramMetrics.usage -= decreaseUsers;
             hardDiskMetrics.usage -= decreaseUsers;
+            networkMetrics.usage -= decreaseUsers;
         }
     }
 

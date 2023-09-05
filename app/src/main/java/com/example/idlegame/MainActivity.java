@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout maxCpuUpgradeBtn=binding.cpuLevelupButton;
         LinearLayout maxRamUpgradeBtn=binding.ramLevelupButton;
         LinearLayout maxHardDiskUpgradeBtn=binding.harddiskLevelupButton;
+        LinearLayout maxNetworkUpgradeBtn=binding.networkLevelupButton;
 
         maxCpuUpgradeBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
@@ -64,6 +65,12 @@ public class MainActivity extends AppCompatActivity {
         maxHardDiskUpgradeBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
                 buyMaxHardDiskUpgrade();
+            }
+        });
+
+        maxNetworkUpgradeBtn.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view) {
+                buyMaxNetworkUpgrade();
             }
         });
     }
@@ -101,6 +108,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void buyMaxNetworkUpgrade() {
+        if (game.getMoney() >= game.networkMetrics.upgradePrice) {
+            game.networkMetrics.increaseMaxUsage();
+            game.playerMetrics.increaseProfitPerUser();
+            game.playerMetrics.subtractMoney(game.networkMetrics.upgradePrice);
+            game.networkMetrics.increaseUpgradePrice();
+            updateTextViews();
+            updateHeader();
+        }
+    }
+
     // Update header data
     private void updateHeader() {
         String str_money = formatValue(game.getMoney());
@@ -126,6 +144,10 @@ public class MainActivity extends AppCompatActivity {
         binding.harddiskProgressBar.setMax(game.hardDiskMetrics.maxUsage);
         binding.harddiskProgressBar.setProgress(game.hardDiskMetrics.usage);
         updateHardDriveProgressDrawable();
+
+        binding.networkProgressBar.setMax(game.networkMetrics.maxUsage);
+        binding.networkProgressBar.setProgress(game.networkMetrics.usage);
+        updateNetworkProgressDrawable();
     }
 
     private void updateCpuProgressDrawable() {
@@ -167,10 +189,24 @@ public class MainActivity extends AppCompatActivity {
         binding.harddiskProgressBar.setProgressDrawable(drawable);
     }
 
+    private void updateNetworkProgressDrawable() {
+        Drawable drawable;
+
+        if (game.networkMetrics.usage >= game.networkMetrics.maxUsage * 0.75) {
+            drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.red_progress_bg);
+        } else if (game.networkMetrics.usage >= game.networkMetrics.maxUsage * 0.5) {
+            drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.yellow_progress_bg);
+        } else {
+            drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.green_progress_bg);
+        }
+        binding.networkProgressBar.setProgressDrawable(drawable);
+    }
+
     private void updateTextViews() {
         binding.cpuUpgradePriceText.setText(formatValue(game.cpuMetrics.upgradePrice));
         binding.ramUpgradePriceText.setText(formatValue(game.ramMetrics.upgradePrice));
         binding.harddiskUpgradePriceText.setText(formatValue(game.hardDiskMetrics.upgradePrice));
+        binding.networkUpgradePriceText.setText(formatValue(game.networkMetrics.upgradePrice));
     }
 
     public void startViewLoop() {
@@ -180,7 +216,8 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 if (game.cpuMetrics.usage <= game.cpuMetrics.maxUsage &&
                     game.ramMetrics.usage <= game.ramMetrics.maxUsage &&
-                    game.hardDiskMetrics.usage <= game.hardDiskMetrics.maxUsage) {
+                    game.hardDiskMetrics.usage <= game.hardDiskMetrics.maxUsage &&
+                    game.networkMetrics.usage <= game.networkMetrics.maxUsage) {
                     ViewLoop();
                 }
 
