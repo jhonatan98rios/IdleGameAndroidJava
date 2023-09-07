@@ -12,9 +12,9 @@ public class Services {
     public boolean boughtSqlDatabase;
 
     public Services() {
-        bucketPrice = 1000;
-        cdnPrice = 10000;
-        sqlDataBasePrice=50000;
+        bucketPrice = 10000;
+        cdnPrice = 50000;
+        sqlDataBasePrice=100000;
 
         boughtBucket = false;
         boughtCdn = false;

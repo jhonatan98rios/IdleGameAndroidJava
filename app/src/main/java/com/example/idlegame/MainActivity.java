@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
             game.playerMetrics.money -= services.bucketPrice;
             services.boughtBucket = true;
             binding.bucketPrice.setText("Comprado");
-            game.playerMetrics.increaseProfitPerUser(5);
+            game.playerMetrics.increaseProfitPerUser(3);
         }
     }
 
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
             game.playerMetrics.money -= services.cdnPrice;
             services.boughtCdn = true;
             binding.cdnPrice.setText("Comprado");
-            game.playerMetrics.increaseProfitPerUser(10);
+            game.playerMetrics.increaseProfitPerUser(5);
         }
     }
 
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
             game.playerMetrics.money -= services.sqlDataBasePrice;
             services.boughtSqlDatabase = true;
             binding.sqlDatabasePrice.setText("Comprado");
-            game.playerMetrics.increaseProfitPerUser(20);
+            game.playerMetrics.increaseProfitPerUser(10);
         }
     }
 

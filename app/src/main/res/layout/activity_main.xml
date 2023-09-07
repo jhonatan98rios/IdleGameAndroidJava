@@ -109,7 +109,8 @@
         <RelativeLayout
             android:id="@+id/Frame"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <LinearLayout
                 android:id="@+id/metricsView"
@@ -398,19 +399,22 @@
                             android:layout_height="fill_parent"
                             android:layout_weight="1"
                             android:text="Bucket Service"
+                            android:textColor="@color/black"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="O serviço de bucket permite armazenar qualquer tipo de arquivo, fazer replicas e consumir eles programaticamente." />
+                            android:text="O serviço de bucket permite armazenar qualquer tipo de arquivo, fazer replicas e consumir eles programaticamente."
+                            android:textColor="@color/black" />
 
                         <TextView
                             android:id="@+id/bucketPrice"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:textColor="@color/black"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -430,19 +434,22 @@
                             android:layout_height="fill_parent"
                             android:layout_weight="1"
                             android:text="CDN Service"
+                            android:textColor="@color/black"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="O serviço de CDN permite entregar conteúdos estáticos com maior performance e escalabilidade." />
+                            android:text="O serviço de CDN permite entregar conteúdos estáticos com maior performance e escalabilidade."
+                            android:textColor="@color/black" />
 
                         <TextView
                             android:id="@+id/cdnPrice"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:textColor="@color/black"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -462,19 +469,22 @@
                             android:layout_height="fill_parent"
                             android:layout_weight="1"
                             android:text="SQL Database Service"
+                            android:textColor="@color/black"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="O serviço de banco de dados SQL permite utilizar um banco de dados SQL com pouca configuração e alta disponibilidade." />
+                            android:text="O serviço de banco de dados SQL permite utilizar um banco de dados SQL com pouca configuração e alta disponibilidade."
+                            android:textColor="@color/black" />
 
                         <TextView
                             android:id="@+id/sqlDatabasePrice"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:textColor="@color/black"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -510,6 +520,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:textColor="@color/black"
                     android:text="Metrics" />
             </LinearLayout>
 
@@ -531,6 +542,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:textColor="@color/black"
                     android:text="Features" />
             </LinearLayout>
 

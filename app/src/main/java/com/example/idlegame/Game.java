@@ -53,7 +53,7 @@ public class Game {
     public void increaseValues() {
         // Generate a random value to increase numberOfUsers and profitPerUser
         int numberOfUsersPercentage = playerMetrics.numberOfUsers / 100;
-        int increaseUsers = random.nextInt((numberOfUsersPercentage * 2) + 1) + 1;
+        int increaseUsers = random.nextInt((numberOfUsersPercentage) + 1) + 1;
 
         playerMetrics.increaseValues(increaseUsers);
 
@@ -69,8 +69,8 @@ public class Game {
             int decreaseUsers = random.nextInt((playerMetrics.numberOfUsers / 2) + 1);
 
             int userLoss = playerMetrics.profitPerUser * decreaseUsers;
-            int usageLoss = random.nextInt(playerMetrics.profitPerUser * playerMetrics.numberOfUsers);
-            int damage = userLoss + usageLoss;
+            double usageLoss = random.nextInt(playerMetrics.profitPerUser * playerMetrics.numberOfUsers) * 1.5;
+            double damage = userLoss + usageLoss;
 
             playerMetrics.numberOfUsers -= decreaseUsers;
             playerMetrics.money -= damage;

@@ -22,7 +22,10 @@ public class PlayerMetrics {
         // Increase numberOfUsers
         numberOfUsers += increaseUsers;
         long profit = profitPerUser * numberOfUsers;
-        double expenses = profit * 0.2;
+        double expenses = money >= 100000 ? profit * 0.5 :
+                          money >= 10000 ? profit * 0.3 :
+                          money >= 5000 ? profit * 0.2 :
+                          profit * 0.1;
 
         // update the value money with profitPerUser and numberOfUsers
         int debtors = random.nextInt(numberOfUsers + 1);
