@@ -36,7 +36,7 @@ public class Game {
             public void run() {
                 executionInterval();
             }
-        }, 0, 500);
+        }, 0, 1000);
     }
 
     public void executionInterval() {

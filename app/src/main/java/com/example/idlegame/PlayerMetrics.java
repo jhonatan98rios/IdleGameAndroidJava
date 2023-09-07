@@ -35,9 +35,7 @@ public class PlayerMetrics {
 
     public void increaseProfitPerUserRandom() {
         double randomNumber = random.nextDouble();
-        if (randomNumber >= 0.9) {
-            profitPerUser += 2;
-        } else if (randomNumber >= 0.5) {
+        if (randomNumber >= 0.75) {
             profitPerUser += 1;
         }
     }

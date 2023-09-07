@@ -13,8 +13,8 @@ public class Services {
 
     public Services() {
         bucketPrice = 1000;
-        cdnPrice = 5000;
-        sqlDataBasePrice=10000;
+        cdnPrice = 10000;
+        sqlDataBasePrice=50000;
 
         boughtBucket = false;
         boughtCdn = false;

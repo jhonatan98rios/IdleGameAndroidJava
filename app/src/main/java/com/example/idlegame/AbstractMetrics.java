@@ -26,8 +26,8 @@ public class AbstractMetrics {
 
     public void increaseMaxUsage() {
         int maxUsagePercentage = maxUsage / 100;
-        int randomMaxCpuUsageIncrease = (maxUsagePercentage  * random.nextInt(180)) + (maxUsagePercentage * 20);
-        maxUsage += randomMaxCpuUsageIncrease;
+        int randomMaxUsageIncrease = (maxUsagePercentage  * random.nextInt(180)) + (maxUsagePercentage * 30);
+        maxUsage += randomMaxUsageIncrease;
     }
 
     public void increaseUpgradePrice() {

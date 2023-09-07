@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         addMetricsEventListener();
         addNavigationEventListeners();
         addServiceEventListener();
+        setServiceView();
     }
 
     public void addMetricsEventListener() {
@@ -108,6 +109,12 @@ public class MainActivity extends AppCompatActivity {
         sqlDatabaseServiceBtn.setOnClickListener((new View.OnClickListener() {
             public void onClick(View view) { buySqlDatabaseService(); }
         }));
+    }
+
+    public void setServiceView() {
+        binding.bucketPrice.setText(String.valueOf(services.bucketPrice));
+        binding.cdnPrice.setText(String.valueOf(services.cdnPrice));
+        binding.sqlDatabasePrice.setText(String.valueOf(services.sqlDataBasePrice));
     }
 
     public void buyMaxCpuUpgrade() {
@@ -303,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
                     //Toast.makeText(getApplicationContext(), "Perdeste", Toast.LENGTH_LONG).show();
                 }
             }
-        }, 0, 500);
+        }, 0, 1000);
     }
 
     public String formatValue(long number) {
