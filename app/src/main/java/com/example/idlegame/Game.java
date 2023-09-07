@@ -13,6 +13,8 @@ public class Game {
     public HardDiskMetrics hardDiskMetrics;
     public NetworkMetrics networkMetrics;
 
+    public Services services;
+
     private Random random;
 
     public Game() {
@@ -21,6 +23,8 @@ public class Game {
         ramMetrics = new RamMetrics();
         hardDiskMetrics = new HardDiskMetrics();
         networkMetrics = new NetworkMetrics();
+
+        services = new Services();
 
         random = new Random();
     }

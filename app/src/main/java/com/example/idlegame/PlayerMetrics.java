@@ -33,12 +33,16 @@ public class PlayerMetrics {
         money -= value;
     }
 
-    public void increaseProfitPerUser() {
+    public void increaseProfitPerUserRandom() {
         double randomNumber = random.nextDouble();
         if (randomNumber >= 0.9) {
             profitPerUser += 2;
         } else if (randomNumber >= 0.5) {
             profitPerUser += 1;
         }
+    }
+
+    public void increaseProfitPerUser(int value) {
+        profitPerUser += value;
     }
 }

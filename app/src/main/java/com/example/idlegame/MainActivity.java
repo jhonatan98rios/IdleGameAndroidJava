@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.idlegame.databinding.ActivityMainBinding;
@@ -19,6 +20,7 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
 
     private Game game;
+    private Services services;
     private ActivityMainBinding binding;
     
     @Override
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Cria uma instância do objeto Game
         game = new Game();
+        services = new Services();
 
         game.startGameLoop();
         startViewLoop();
@@ -41,33 +44,34 @@ public class MainActivity extends AppCompatActivity {
         updateTextViews();
 
         // Add methods to the clickable elements
-        addEventListener();
+        addMetricsEventListener();
+        addNavigationEventListeners();
+        addServiceEventListener();
     }
 
-    public void addEventListener() {
+    public void addMetricsEventListener() {
         LinearLayout maxCpuUpgradeBtn=binding.cpuLevelupButton;
-        LinearLayout maxRamUpgradeBtn=binding.ramLevelupButton;
-        LinearLayout maxHardDiskUpgradeBtn=binding.harddiskLevelupButton;
-        LinearLayout maxNetworkUpgradeBtn=binding.networkLevelupButton;
-
         maxCpuUpgradeBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
                 buyMaxCpuUpgrade();
             }
         });
 
+        LinearLayout maxRamUpgradeBtn=binding.ramLevelupButton;
         maxRamUpgradeBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
                 buyMaxRamUpgrade();
             }
         });
 
+        LinearLayout maxHardDiskUpgradeBtn=binding.harddiskLevelupButton;
         maxHardDiskUpgradeBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
                 buyMaxHardDiskUpgrade();
             }
         });
 
+        LinearLayout maxNetworkUpgradeBtn=binding.networkLevelupButton;
         maxNetworkUpgradeBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
                 buyMaxNetworkUpgrade();
@@ -75,10 +79,41 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void addNavigationEventListeners() {
+        LinearLayout metricsBtn=binding.metricsButton;
+        metricsBtn.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view) {
+                goToMetricsView();
+            }
+        });
+
+        LinearLayout featuresBtn=binding.featuresButton;
+        featuresBtn.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view) { goToFeaturesView(); }
+        });
+    }
+
+    public void addServiceEventListener() {
+        LinearLayout bucketServiceBtn=binding.bucketService;
+        bucketServiceBtn.setOnClickListener((new View.OnClickListener() {
+            public void onClick(View view) { buyBucketService(); }
+        }));
+
+        LinearLayout cdnServiceBtn=binding.cdnService;
+        cdnServiceBtn.setOnClickListener((new View.OnClickListener() {
+            public void onClick(View view) { buyCdnService(); }
+        }));
+
+        LinearLayout sqlDatabaseServiceBtn=binding.sqlDatabaseService;
+        sqlDatabaseServiceBtn.setOnClickListener((new View.OnClickListener() {
+            public void onClick(View view) { buySqlDatabaseService(); }
+        }));
+    }
+
     public void buyMaxCpuUpgrade() {
         if (game.getMoney() >= game.cpuMetrics.upgradePrice) {
             game.cpuMetrics.increaseMaxUsage();
-            game.playerMetrics.increaseProfitPerUser();
+            game.playerMetrics.increaseProfitPerUserRandom();
             game.playerMetrics.subtractMoney(game.cpuMetrics.upgradePrice);
             game.cpuMetrics.increaseUpgradePrice();
             updateTextViews();
@@ -89,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
     public void buyMaxRamUpgrade() {
         if (game.getMoney() >= game.ramMetrics.upgradePrice) {
             game.ramMetrics.increaseMaxUsage();
-            game.playerMetrics.increaseProfitPerUser();
+            game.playerMetrics.increaseProfitPerUserRandom();
             game.playerMetrics.subtractMoney(game.ramMetrics.upgradePrice);
             game.ramMetrics.increaseUpgradePrice();
             updateTextViews();
@@ -100,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
     public void buyMaxHardDiskUpgrade() {
         if (game.getMoney() >= game.hardDiskMetrics.upgradePrice) {
             game.hardDiskMetrics.increaseMaxUsage();
-            game.playerMetrics.increaseProfitPerUser();
+            game.playerMetrics.increaseProfitPerUserRandom();
             game.playerMetrics.subtractMoney(game.hardDiskMetrics.upgradePrice);
             game.hardDiskMetrics.increaseUpgradePrice();
             updateTextViews();
@@ -111,12 +146,55 @@ public class MainActivity extends AppCompatActivity {
     public void buyMaxNetworkUpgrade() {
         if (game.getMoney() >= game.networkMetrics.upgradePrice) {
             game.networkMetrics.increaseMaxUsage();
-            game.playerMetrics.increaseProfitPerUser();
+            game.playerMetrics.increaseProfitPerUserRandom();
             game.playerMetrics.subtractMoney(game.networkMetrics.upgradePrice);
             game.networkMetrics.increaseUpgradePrice();
             updateTextViews();
             updateHeader();
         }
+    }
+
+    public void buyBucketService() {
+        if (game.playerMetrics.money >= services.bucketPrice && services.boughtBucket == false) {
+            game.playerMetrics.money -= services.bucketPrice;
+            services.boughtBucket = true;
+            binding.bucketPrice.setText("Comprado");
+            game.playerMetrics.increaseProfitPerUser(5);
+        }
+    }
+
+    public void buyCdnService() {
+        if (game.playerMetrics.money >= services.cdnPrice && services.boughtCdn == false) {
+            game.playerMetrics.money -= services.cdnPrice;
+            services.boughtCdn = true;
+            binding.cdnPrice.setText("Comprado");
+            game.playerMetrics.increaseProfitPerUser(10);
+        }
+    }
+
+    public void buySqlDatabaseService() {
+        if (game.playerMetrics.money >= services.sqlDataBasePrice && services.boughtSqlDatabase == false) {
+            game.playerMetrics.money -= services.sqlDataBasePrice;
+            services.boughtSqlDatabase = true;
+            binding.sqlDatabasePrice.setText("Comprado");
+            game.playerMetrics.increaseProfitPerUser(20);
+        }
+    }
+
+    public void goToMetricsView() {
+        LinearLayout metricsView = binding.metricsView;
+        metricsView.setVisibility(View.VISIBLE);
+
+        LinearLayout featuresView = binding.featuresView;
+        featuresView.setVisibility(View.INVISIBLE);
+    }
+
+    public void goToFeaturesView() {
+        LinearLayout metricsView = binding.metricsView;
+        metricsView.setVisibility(View.INVISIBLE);
+
+        LinearLayout featuresView = binding.featuresView;
+        featuresView.setVisibility(View.VISIBLE);
     }
 
     // Update header data
